@@ -137,7 +137,46 @@ function queryByAddToInventory(){
 
 }
 
-function queryAddProduct(){}
+function queryAddProduct(){
+    console.log("Please Add New Product Below:\n");
+    console.log("===========\n");
+    //prompt message to add data
+    inquirer.prompt([
+    {
+        type: 'input',
+        name: 'productName',
+        message: 'Name of Product:'
+    },
+    {
+        type: 'input',
+        name: 'departmentName',
+        message: 'Department Name:'
+    },
+    {
+        type: 'input',
+        name: 'price',
+        message: 'Price of New Item:'
+    },
+    {
+        type: 'input',
+        name: 'qty',
+        message: 'Quantity Available:'
+    }
+    ]).then(function (input){
+        var values = [input.productName, input.departmentName, input.price, input.qty];
+
+        queryStr = 'INSERT INTO products SET product_name = ?, department_name = ? , price = ?, stock_quantity = ?';
+        
+        connection.query(queryStr, values, function(err,data){
+            if (!(err)) {
+                console.log(" \n Product added succesfully \n");
+                showTable();
+            } else {
+                throw err;
+            }
+        });
+    });
+}
 
 function showTable() {
     queryStr = 'SELECT * FROM products';
